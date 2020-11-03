@@ -1,4 +1,4 @@
-﻿using Nop.Core;
+using Nop.Core;
 using Nop.Core.Domain.Directory;
 using Nop.Services.Directory;
 using Nop.Services.Shipping;
@@ -57,7 +57,7 @@ namespace NopBrasil.Plugin.Shipping.Correios.Service
         private string GetZipPostalCodeFrom(GetShippingOptionRequest getShippingOptionRequest)
         {
             if ((getShippingOptionRequest.WarehouseFrom != null) && (!string.IsNullOrEmpty(_addressService.GetAddressById(getShippingOptionRequest.WarehouseFrom.AddressId)?.ZipPostalCode)))
-                return  _addressService.GetAddressById(getShippingOptionRequest.WarehouseFrom.AddressId).ZipPostalCode;
+                return _addressService.GetAddressById(getShippingOptionRequest.WarehouseFrom.AddressId).ZipPostalCode;
             if (!string.IsNullOrEmpty(getShippingOptionRequest.ZipPostalCodeFrom))
                 return getShippingOptionRequest.ZipPostalCodeFrom;
             return _correiosSettings.PostalCodeFrom;
@@ -65,7 +65,7 @@ namespace NopBrasil.Plugin.Shipping.Correios.Service
 
         private decimal GetDeclaredValue(GetShippingOptionRequest shippingOptionRequest)
         {
-            decimal declaredValue = GetConvertedRateFromPrimaryCurrency(shippingOptionRequest.Items.Sum(item => item.ShoppingCartItem.Product.Price));
+            decimal declaredValue = GetConvertedRateFromPrimaryCurrency(shippingOptionRequest.Items.Sum(item => item.Product.Price * item.GetQuantity()));
             return Math.Max(declaredValue, _correiosSettings.DeclaredMinimumValue);
         }
 
